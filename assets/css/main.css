@@ -1,0 +1,2622 @@
+/* --- Reprogramming Reality: Book Theme v2.0 (3D Title) --- */
+
+/* 1. FONT IMPORTS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* 2. CSS VARIABLES */
+:root {
+    --font-serif: 'Lora', serif;
+    --font-sans: 'Inter', sans-serif;
+    --color-background: #1a1a1a;
+    --color-text: #e8e8e8;
+    --color-accent-green: #00ff00;
+    --color-accent-red: rgba(255, 0, 75, 0.8);
+    --color-accent-cyan: rgba(0, 255, 255, 0.8);
+    --color-meta: #888;
+    --color-border: rgba(0, 255, 0, 0.15);
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 3. BASE & RESET STYLES */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 62.5%; scroll-behavior: smooth; }
+body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+/* Ask Book Modal Styles */
+.ask-book-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.ask-book-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ask-book-modal .modal-content {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    padding: 3rem;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+}
+
+.ask-book-modal textarea {
+    width: 100%;
+    min-height: 100px;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    resize: vertical;
+}
+
+.ask-book-modal button {
+    background: var(--color-accent-green);
+    border: none;
+    color: var(--color-background);
+    padding: 1rem 2rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.ask-book-modal button:hover {
+    background: #00cc00;
+}
+
+.book-answer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    display: none;
+}
+
+.book-answer.active {
+    display: block;
+}
+
+/* Interactive Questions Styles */
+.interactive-question {
+    background: rgba(0, 255, 0, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.question-text {
+    font-family: var(--font-sans);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.question-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.option-btn {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 1rem 2rem;
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-align: left;
+    border-radius: 4px;
+}
+
+.option-btn:hover {
+    border-color: var(--color-accent-green);
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.option-btn.correct {
+    border-color: var(--color-accent-green);
+    background: rgba(0, 255, 0, 0.2);
+}
+
+.option-btn.incorrect {
+    border-color: var(--color-accent-red);
+    background: rgba(255, 0, 75, 0.2);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.question-explanation {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    font-style: italic;
+}
+
+/* Book Pagination Styles */
+.book-pagination {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-container {
+    min-height: 60vh;
+    margin-bottom: 2rem;
+}
+
+.book-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border);
+    margin-top: 2rem;
+}
+
+.book-nav button {
+    background: transparent;
+    border: 1px solid var(--color-accent-green);
+    color: var(--color-accent-green);
+    padding: 0.8rem 1.6rem;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    transition: var(--transition-base);
+}
+
+.book-nav button:hover {
+    background: var(--color-accent-green);
+    color: var(--color-background);
+}
+
+.book-nav button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--color-meta);
+    color: var(--color-meta);
+}
+
+.book-nav button:disabled:hover {
+    background: transparent;
+    color: var(--color-meta);
+}
+
+.page-info {
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    color: var(--color-meta);
+}
+
+/* 4. LANDING PAGE HERO SECTION */
+#hero-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--color-background);
+}
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.7) 100%);
+}
+
+/* --- THE NEW 3D TITLE EFFECT --- */
+.hero-content .book-title {
+    font-family: var(--font-sans);
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+    color: var(--color-text);
+    /* Remove the old gradient and animation */
+    background: none;
+    -webkit-text-fill-color: inherit;
+    animation: none;
+    /* Add the static 3D text-shadow */
+    text-shadow: 2px 2px 0px var(--color-accent-red), -2px -2px 0px var(--color-accent-cyan);
+    transition: var(--transition-base);
+}
+
+.hero-content .book-title:hover {
+    /* On hover, make the glitch effect more pronounced */
+    transform: translate(-1px, -1px);
+    text-shadow: 4px 4px 0px var(--color-accent-red), -4px -4px 0px var(--color-accent-cyan);
+}
+
+.hero-content .book-tagline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: var(--color-meta);
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    letter-spacing: 0.05em;
+}
+
+/* 5. CHAPTER & PAGE LAYOUT */
+.post-template .chapter-content,
+.page-template .article-content {
+    display: block;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+.chapter-header {
+    text-align: left;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 3rem;
+}
+.chapter-feature-image {
+    margin-bottom: 3rem;
+}
+.chapter-feature-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    filter: sepia(15%) contrast(95%);
+}
+.progress-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 2000;
+}
+.progress-bar {
+    height: 100%;
+    background: var(--color-accent-green);
+    width: 0%;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+    transition: width 0.1s linear;
+}
+
+/* 6. TYPOGRAPHY */
+h1, h2, h3, h4, h5, h6, .section-title {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.chapter-label {
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    color: var(--color-accent-green);
+    margin-bottom: 1rem;
+    display: block;
+}
+.chapter-title {
+    font-size: clamp(3.2rem, 7vw, 5.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+}
+.gh-content {
+    font-size: 2rem;
+    line-height: 1.8;
+}
+.gh-content p:first-of-type::first-letter {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 7rem;
+    float: left;
+    line-height: 0.8;
+    margin-right: 1.5rem;
+    margin-top: 0.5rem;
+    color: var(--color-accent-green);
+}
+.gh-content a {
+    color: var(--color-accent-green);
+    text-decoration: none;
+    transition: var(--transition-base);
+    text-shadow: 0 0 0px rgba(0, 255, 0, 0);
+}
+.gh-content a:hover {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+}
+
+/* 7. KOENIG EDITOR STYLES (Fixes Theme Errors) */
+.kg-width-wide, .kg-width-full {
+    position: relative;
+    margin: 2rem auto;
+    transition: all 0.3s ease-in-out;
+}
+.kg-width-wide {
+    width: 85vw;
+    max-width: 1040px;
+}
+.kg-width-full {
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    max-width: none;
+}
+.kg-width-wide img, .kg-width-full img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* Added for consistency */
+}
+
+/* The main content text */
+.gh-content {
+    font-size: 2rem; /* Slightly larger for comfortable reading */
+    line-height: 1.8;
+}
+
+/* The Drop Cap effect */
+.gh-content p:first-of-type::first-letter {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 7rem;
+    float: left;
+    line-height: 0.8;
+    margin-right: 1.5rem;
+    margin-top: 0.5rem;
+    color: var(--color-accent);
+}
+
+.gh-content a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: var(--transition-base);
+    text-shadow: 0 0 0px rgba(0, 255, 0, 0); /* Start with no glow */
+}
+
+.gh-content a:hover {
+    color: #fff;
+    /* The subtle hover glow */
+    text-shadow: var(--shadow-glow);
+}
+
+/* 6. HOMEPAGE STYLES (Kept mostly the same) */
+
+.hero-section {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10rem 0 6rem;
+    background: radial-gradient(ellipse at center, rgba(0, 255, 0, 0.1) 0%, transparent 70%);
+}
+
+.book-title {
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+    animation: glowPulse 3s ease-in-out infinite alternate;
+}
+
+.book-tagline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: var(--color-meta);
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    letter-spacing: 0.05em;
+}
+
+/* Chapter Grid & Cards */
+.chapters-section {
+    padding: 6rem 0;
+}
+.chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.chapter-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.chapter-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--color-accent);
+}
+/* --- Reprogramming Reality: Interactive Hero Styles --- */
+
+/* This container holds the canvas and the text content. */
+#hero-canvas-container {
+    position: relative; /* Establishes a positioning context for its children */
+    width: 100%;
+    height: 100vh; /* Makes the hero section take up the full viewport height */
+    overflow: hidden; /* Prevents any accidental scrollbars */
+    background-color: var(--color-background); /* Fallback color */
+}
+
+/* The canvas itself is positioned absolutely to fill the container. */
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Sits behind the text content */
+}
+
+/* The text content is layered on top of the canvas. */
+.hero-content {
+    position: relative;
+    z-index: 2; /* Sits in front of the canvas */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    /* Adds a subtle dark overlay to ensure text is always readable */
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.7) 100%);
+}
+
+/* Refined title styles for better impact over the animation */
+.hero-content .book-title {
+    animation: glowPulse 4s ease-in-out infinite alternate;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* Making the rest of the site appear below the full-screen hero */
+.site-main {
+    position: relative;
+    z-index: 3; /* Ensures it sits on top of the hero */
+    background: var(--color-background); /* Gives it a solid background */
+}
+
+/* --- Keep other homepage styles like buttons, footer, etc. as they are --- */
+/* (You can paste your existing CTA, button, and footer styles here) */
+/* Responsive */
+@media (max-width: 768px) {
+  html {
+    font-size: 55%;
+  }
+  
+  .chapter-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Chapter Navigation */
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-sans);
+}
+
+.chapter-navigation a {
+    color: var(--color-meta);
+    text-decoration: none;
+    transition: var(--transition-base);
+    max-width: 45%;
+}
+
+.chapter-navigation a:hover {
+    color: var(--color-accent);
+}
+
+.chapter-navigation span {
+    display: block;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.chapter-navigation strong {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.nav-next {
+    text-align: right;
+}
+
+@keyframes glowPulse {
+    from { filter: drop-shadow(0 0 15px rgba(0, 255, 0, 0.4)); }
+    to { filter: drop-shadow(0 0 30px rgba(0, 255, 0, 0.7)); }
+}
+/*
+ * Koenig Editor Styles
+ * These classes are required by Ghost for wide and full-width images.
+ * Add this code to the bottom of your main.css file.
+*/
+
+/* This handles the 'wide' image card */
+.kg-width-wide {
+    /* Break out of the main content container */
+    position: relative;
+    width: 85vw;
+    margin: 2rem auto;
+    max-width: 1040px; /* Adjust as needed */
+    transition: all 0.3s ease-in-out;
+    /* The subtle, base 3D glasses effect */
+    box-shadow: 2px 2px 0px rgba(255, 0, 75, 0.7), -2px -2px 0px rgba(0, 255, 255, 0.7);
+}
+
+/* This handles the 'full' image card */
+.kg-width-full {
+    /* Break out completely to the edge of the viewport */
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    max-width: none;
+    transition: all 0.3s ease-in-out;
+    /* The subtle, base 3D glasses effect */
+    box-shadow: 2px 2px 0px rgba(255, 0, 75, 0.7), -2px -2px 0px rgba(0, 255, 255, 0.7);
+}
+
+/* On hover, we make the "glitch" effect more pronounced */
+.kg-width-wide:hover,
+.kg-width-full:hover {
+    transform: translate(1px, -1px);
+    box-shadow: 4px 4px 0px rgba(255, 0, 75, 0.9), -4px -4px 0px rgba(0, 255, 255, 0.9);
+}
+
+
+/* Ensure the images within these cards behave correctly */
+.kg-width-wide img,
+.kg-width-full img {
+    width: 100%;
+    height: auto;
+}
+
+/*
+ * Chapter Card Grid & Post Card Styles
+ * Add this to your main.css file to fix the layout, text color,
+ * and interactivity of the chapter cards on the homepage.
+*/
+
+/* 8. HOMEPAGE CHAPTER GRID */
+
+.chapters-section {
+    padding: 8rem 0;
+    background: var(--color-background); /* Ensure solid background */
+}
+
+/*
+ * Split Reality Chapter View
+ * This replaces the old .chapter-grid and .post-card styles.
+*/
+
+.split-view-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12-column grid for flexibility */
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 5rem auto;
+    padding: 0 2rem;
+}
+
+/* The left column containing the sticky images */
+.split-view-images {
+    grid-column: 1 / span 6; /* Takes up the first 6 columns */
+    position: sticky;
+    top: 10vh;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #222;
+}
+
+.split-image-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* All images are invisible by default */
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.split-image-item.is-active {
+    opacity: 1; /* The active image is made visible by JS */
+}
+
+.split-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* The right column containing the scrolling text blocks */
+.split-view-text {
+    grid-column: 8 / span 5; /* Takes up the last 5 columns, leaving a gap */
+    padding-bottom: 50vh; /* Extra padding to ensure the last item can be centered */
+}
+
+.split-text-item {
+    display: block;
+    padding: 4rem 0;
+    min-height: 40vh; /* Gives each item some breathing room */
+    text-decoration: none;
+    color: var(--color-meta);
+    border-bottom: 1px solid var(--color-border);
+    transition: var(--transition-base);
+}
+
+.split-text-item:hover {
+    color: var(--color-text);
+}
+
+.split-text-title {
+    font-size: clamp(2.8rem, 4vw, 4rem);
+    line-height: 1.2;
+    color: var(--color-text);
+    margin-bottom: 2rem;
+}
+
+.split-text-title span {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--color-accent-green);
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+}
+
+.split-text-excerpt {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    line-height: 1.7;
+    max-width: 45ch; /* Optimal character width for readability */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 992px) {
+    .split-view-container {
+        grid-template-columns: 1fr; /* Stack the columns */
+    }
+    .split-view-images {
+        grid-column: 1 / -1;
+        position: relative; /* Un-stick the image column */
+        top: auto;
+        height: 50vh; /* Give it a fixed height */
+        margin-bottom: 4rem;
+    }
+    .split-view-text {
+        grid-column: 1 / -1;
+        padding-bottom: 0;
+    }
+}
+
+
+/* The hover effect for the entire card */
+.post-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--color-accent-green);
+}
+
+/* The image link at the top of the card */
+.post-card-image-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 65%; /* Aspect ratio for the image container */
+    overflow: hidden;
+}
+
+.post-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.post-card:hover .post-card-image {
+    transform: scale(1.1); /* Zoom effect on hover */
+}
+
+/* The main content area of the card */
+.post-card-content {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows this section to fill available space */
+}
+
+/* The link that wraps the text content */
+.post-card-content-link {
+    text-decoration: none; /* Removes the default underline */
+    color: inherit; /* Ensures text inside doesn't turn purple */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.post-card-header {
+    flex-grow: 1; /* Pushes the author meta to the bottom */
+}
+
+.post-card-primary-tag {
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    color: var(--color-accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.post-card-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    color: var(--color-text); /* Explicitly set text color */
+}
+
+.post-card-excerpt p {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--color-meta); /* Use the meta color for the excerpt */
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* The author and date meta at the bottom */
+.post-card-meta {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.author-list {
+    list-style: none;
+    display: flex;
+    margin-right: 1rem;
+}
+
+.author-avatar {
+    display: block;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+}
+
+.author-profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-card-byline-content {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    color: var(--color-meta);
+}
+
+/* ============================================
+   CHAPTER PAGE LAYOUT - BOOK-STYLE DESIGN
+   ============================================ */
+
+.chapter-page {
+    background: #f8f6f0; /* Warm, book-like background */
+    min-height: 100vh;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: #2c2c2c;
+}
+
+.chapter-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+    position: relative;
+    background: #fff;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    border: 1px solid #e8e4d8;
+}
+
+/* ============================================
+   CHAPTER HEADER
+   ============================================ */
+
+.chapter-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #d4c5a9;
+    position: relative;
+}
+
+.ask-book-btn {
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    background: #fff;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ask-book-btn:hover {
+    background: #2c2c2c;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.chapter-number {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.chapter-title {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+}
+
+.chapter-quote {
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #5a5a5a;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* ============================================
+   CHAPTER CONTENT
+   ============================================ */
+
+.chapter-content-body {
+    margin-bottom: 4rem;
+}
+
+.gh-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.gh-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+/* Large Drop Cap for First Letter */
+.gh-content p:first-of-type::first-letter {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 6rem;
+    line-height: 0.8;
+    float: left;
+    margin: 0.1rem 1rem 0 0;
+    color: #2c2c2c;
+}
+
+.gh-content h2,
+.gh-content h3,
+.gh-content h4 {
+    font-family: inherit;
+    color: #1a1a1a;
+    margin: 2.5rem 0 1.5rem;
+    font-weight: 700;
+}
+
+.gh-content h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+}
+
+.gh-content blockquote {
+    border-left: 4px solid #d4c5a9;
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: #faf9f6;
+    font-style: italic;
+    color: #5a5a5a;
+}
+
+/* ============================================
+   INTERACTIVE QUESTIONS
+   ============================================ */
+
+.chapter-questions {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+}
+
+.interactive-question {
+    margin-bottom: 2rem;
+}
+
+.interactive-question:last-child {
+    margin-bottom: 0;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.question-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.option-btn {
+    background: #fff;
+    border: 2px solid #d4c5a9;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.option-btn:hover {
+    border-color: #8b7355;
+    background: #faf9f6;
+    transform: translateX(4px);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+}
+
+.option-btn.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.option-btn.incorrect {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.question-explanation {
+    background: #e8f4fd;
+    border: 1px solid #bee5eb;
+    border-radius: 6px;
+    padding: 1.5rem;
+    color: #0c5460;
+    font-style: italic;
+}
+
+.question-explanation p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============================================
+   ASK THE BOOK MODAL
+   ============================================ */
+
+.ask-book-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.ask-book-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.ask-book-modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #1a1a1a;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body textarea {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 1.5rem;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #8b7355;
+    box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+}
+
+.submit-question {
+    background: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-question:hover {
+    background: #1a1a1a;
+    transform: translateY(-1px);
+}
+
+.modal-response {
+    padding: 0 2rem 2rem;
+}
+
+.loading {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+}
+
+.ai-response {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.ai-response h4 {
+    margin: 0 0 1rem;
+    color: #1a1a1a;
+    font-size: 1.1rem;
+}
+
+.ai-response p {
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* ============================================
+   CHAPTER NAVIGATION
+   ============================================ */
+
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    gap: 2rem;
+}
+
+.chapter-navigation a {
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex: 1;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.chapter-navigation a:hover {
+    background: #f0f0f0;
+    border-color: #8b7355;
+    transform: translateY(-2px);
+}
+
+.chapter-navigation span {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.chapter-navigation strong {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.nav-next {
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .chapter-container {
+        padding: 2rem 1.5rem;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+    }
+    
+    .ask-book-btn {
+        position: static;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+    
+    .chapter-title {
+        font-size: 2.5rem;
+    }
+    
+    .chapter-quote {
+        font-size: 1.1rem;
+    }
+    
+    .gh-content p:first-of-type::first-letter {
+        font-size: 4.5rem;
+        margin-right: 0.8rem;
+    }
+    
+    .chapter-navigation {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-next {
+        text-align: left;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-response {
+        padding: 1.5rem;
+    }
+}
+
+/* ============================================
+   DYNAMIC BOOK-STYLE LAYOUT - RESPONSIVE COLUMNS
+   ============================================ */
+
+.chapter-page {
+    background: #f8f6f0;
+    min-height: 100vh;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: #2c2c2c;
+}
+
+.chapter-container {
+    max-width: 1200px; /* Increased for two-column layout */
+    margin: 0 auto;
+    padding: 4rem 3rem;
+    position: relative;
+    background: #fff;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    border: 1px solid #e8e4d8;
+}
+
+/* ============================================
+   CHAPTER HEADER
+   ============================================ */
+
+.chapter-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #d4c5a9;
+    position: relative;
+}
+
+.ask-book-btn {
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    background: #fff;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ask-book-btn:hover {
+    background: #2c2c2c;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.chapter-number {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.chapter-title {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: #1a1a1a;
+}
+
+.chapter-quote {
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #5a5a5a;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* ============================================
+   DYNAMIC COLUMN LAYOUT
+   ============================================ */
+
+.chapter-content-body {
+    margin-bottom: 4rem;
+}
+
+.gh-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+}
+
+/* Single column on mobile and small screens */
+@media (max-width: 768px) {
+    .gh-content {
+        column-count: 1;
+        font-size: 1rem;
+        line-height: 1.7;
+        padding: 0;
+    }
+    
+    .chapter-container {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Two columns on tablets and larger screens - BOOK STYLE */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gh-content {
+        column-count: 2;
+        column-gap: 3rem;
+        column-rule: 1px solid #e8e4d8;
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    
+    .chapter-container {
+        max-width: 900px;
+        padding: 3rem 2.5rem;
+    }
+}
+
+/* Two columns on desktop - OPTIMAL READING */
+@media (min-width: 1025px) {
+    .gh-content {
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e8e4d8;
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+    
+    .chapter-container {
+        max-width: 1100px;
+        padding: 4rem 3rem;
+    }
+}
+
+/* Prevent column breaks in unwanted places */
+.gh-content h1, 
+.gh-content h2, 
+.gh-content h3, 
+.gh-content h4,
+.gh-content blockquote {
+    break-after: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.gh-content p {
+    margin-bottom: 1.5rem;
+    orphans: 3;
+    widows: 3;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Large Drop Cap - Only on first paragraph */
+.gh-content p:first-of-type::first-letter {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    float: left;
+    margin: 0.1rem 0.8rem 0 0;
+    color: #2c2c2c;
+}
+
+/* Better spacing for headings in columns */
+.gh-content h2,
+.gh-content h3,
+.gh-content h4 {
+    font-family: inherit;
+    color: #1a1a1a;
+    margin: 2rem 0 1.5rem;
+    font-weight: 700;
+    column-span: all; /* Span across columns for major headings */
+}
+
+.gh-content h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.gh-content h3 {
+    font-size: 1.4rem;
+    column-span: none; /* Allow h3 to stay in column */
+}
+
+.gh-content blockquote {
+    border-left: 4px solid #d4c5a9;
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: #faf9f6;
+    font-style: italic;
+    color: #5a5a5a;
+    column-span: all; /* Span across columns */
+}
+
+/* ============================================
+   IMAGE HANDLING IN COLUMNS
+   ============================================ */
+
+.gh-content img,
+.gh-content figure {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Small images stay in column, large images span across */
+.gh-content img {
+    max-width: 300px; /* Reasonable size for in-column images */
+}
+
+/* Force wide images to span both columns */
+.kg-width-wide,
+.kg-width-full {
+    column-span: all !important;
+    max-width: 600px !important;
+    margin: 2rem auto !important;
+}
+
+.kg-width-wide img,
+.kg-width-full img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Image captions */
+.gh-content figcaption {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* ============================================
+   INTERACTIVE QUESTIONS
+   ============================================ */
+
+.chapter-questions {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+    column-span: all; /* Always span full width */
+}
+
+.interactive-question {
+    margin-bottom: 2rem;
+}
+
+.interactive-question:last-child {
+    margin-bottom: 0;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.question-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.option-btn {
+    background: #fff;
+    border: 2px solid #d4c5a9;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.option-btn:hover {
+    border-color: #8b7355;
+    background: #faf9f6;
+    transform: translateY(-2px);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+}
+
+.option-btn.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.option-btn.incorrect {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.question-explanation {
+    background: #e8f4fd;
+    border: 1px solid #bee5eb;
+    border-radius: 6px;
+    padding: 1.5rem;
+    color: #0c5460;
+    font-style: italic;
+}
+
+.question-explanation p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============================================
+   CHAPTER CONTENT
+   ============================================ */
+
+.chapter-content-body {
+    margin-bottom: 4rem;
+}
+
+.gh-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.gh-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+/* ============================================
+   IMAGE HANDLING - AUTO RESIZE ALL IMAGES
+   ============================================ */
+
+/* Default image sizing for all images in content */
+.gh-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem auto;
+    display: block;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.gh-content img:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* Ghost Editor Image Cards */
+.kg-image-card {
+    margin: 2.5rem 0;
+    text-align: center;
+}
+
+.kg-image-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.kg-image-card figcaption {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Override any wide/full width settings for chapter pages */
+.chapter-page .kg-width-wide,
+.chapter-page .kg-width-full {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 2rem auto;
+    left: auto;
+    right: auto;
+    margin-left: auto;
+    margin-right: auto;
+    transform: none;
+}
+
+.chapter-page .kg-width-wide img,
+.chapter-page .kg-width-full img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Ensure images in paragraphs don't break layout */
+.gh-content p img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+/* Figure elements */
+.gh-content figure {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.gh-content figure img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.gh-content figcaption {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Large Drop Cap for First Letter */
+.gh-content p:first-of-type::first-letter {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 6rem;
+    line-height: 0.8;
+    float: left;
+    margin: 0.1rem 1rem 0 0;
+    color: #2c2c2c;
+}
+
+.gh-content h2,
+.gh-content h3,
+.gh-content h4 {
+    font-family: inherit;
+    color: #1a1a1a;
+    margin: 2.5rem 0 1.5rem;
+    font-weight: 700;
+}
+
+.gh-content h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+}
+
+.gh-content blockquote {
+    border-left: 4px solid #d4c5a9;
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: #faf9f6;
+    font-style: italic;
+    color: #5a5a5a;
+}
+
+/* ============================================
+   INTERACTIVE QUESTIONS
+   ============================================ */
+
+.chapter-questions {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+}
+
+.interactive-question {
+    margin-bottom: 2rem;
+}
+
+.interactive-question:last-child {
+    margin-bottom: 0;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.question-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.option-btn {
+    background: #fff;
+    border: 2px solid #d4c5a9;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.option-btn:hover {
+    border-color: #8b7355;
+    background: #faf9f6;
+    transform: translateX(4px);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+}
+
+.option-btn.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.option-btn.incorrect {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.question-explanation {
+    background: #e8f4fd;
+    border: 1px solid #bee5eb;
+    border-radius: 6px;
+    padding: 1.5rem;
+    color: #0c5460;
+    font-style: italic;
+}
+
+.question-explanation p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============================================
+   ASK THE BOOK MODAL
+   ============================================ */
+
+.ask-book-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.ask-book-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.ask-book-modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #1a1a1a;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body textarea {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 1.5rem;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #8b7355;
+    box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+}
+
+.submit-question {
+    background: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-question:hover {
+    background: #1a1a1a;
+    transform: translateY(-1px);
+}
+
+.modal-response {
+    padding: 0 2rem 2rem;
+}
+
+.loading {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+}
+
+.ai-response {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.ai-response h4 {
+    margin: 0 0 1rem;
+    color: #1a1a1a;
+    font-size: 1.1rem;
+}
+
+.ai-response p {
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* ============================================
+   CHAPTER NAVIGATION
+   ============================================ */
+
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    gap: 2rem;
+}
+
+.chapter-navigation a {
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex: 1;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.chapter-navigation a:hover {
+    background: #f0f0f0;
+    border-color: #8b7355;
+    transform: translateY(-2px);
+}
+
+.chapter-navigation span {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.chapter-navigation strong {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.nav-next {
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .chapter-container {
+        padding: 2rem 1.5rem;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+    }
+    
+    .ask-book-btn {
+        position: static;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+    
+    .chapter-title {
+        font-size: 2.5rem;
+    }
+    
+    .chapter-quote {
+        font-size: 1.1rem;
+    }
+    
+    .gh-content p:first-of-type::first-letter {
+        font-size: 4.5rem;
+        margin-right: 0.8rem;
+    }
+    
+    .chapter-navigation {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-next {
+        text-align: left;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-response {
+        padding: 1.5rem;
+    }
+}
+
+/* ============================================
+   ENHANCED COLUMN-AWARE IMAGE HANDLING
+   ============================================ */
+
+/* Default image sizing - column-aware */
+.chapter-container img,
+.chapter-content-body img,
+.gh-content img {
+    max-width: 300px !important; /* Perfect for single column width */
+    width: auto !important;
+    height: auto !important;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    break-inside: avoid;
+}
+
+.gh-content img:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* Mobile: Full width but reasonable size */
+@media (max-width: 768px) {
+    .chapter-container img,
+    .chapter-content-body img,
+    .gh-content img {
+        max-width: 90% !important;
+        margin: 1.5rem auto;
+    }
+}
+
+/* Desktop and Tablet: Two-column layout */
+@media (min-width: 769px) {
+    .book-page .page-content {
+        column-count: 2;
+        column-gap: 3rem;
+        column-width: auto;
+        column-fill: balance; /* This helps balance content between columns */
+    }
+    
+    /* Title section spans full width */
+    .article-header {
+        column-span: all;
+        margin-bottom: 2rem;
+    }
+    
+    /* Questions at the bottom */
+    .chapter-questions {
+        column-span: all;
+        margin-top: 3rem;
+        clear: both;
+    }
+    
+    /* Regular content fills columns */
+    .gh-content > *:not(.article-header):not(.chapter-questions) {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    .gh-content img {
+        max-width: 100% !important;
+        width: calc(100% - 2rem) !important;
+        margin: 1rem;
+    }
+}
+
+/* Special handling for Ghost editor classes */
+.chapter-page .kg-width-wide {
+    column-span: all !important; /* Span across columns */
+    max-width: 600px !important;
+    margin: 2.5rem auto !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+}
+
+.chapter-page .kg-width-full {
+    column-span: all !important; /* Span across columns */
+    max-width: 700px !important;
+    margin: 2.5rem auto !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+}
+
+.chapter-page .kg-width-wide img,
+.chapter-page .kg-width-full img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+}
+
+/* Figure elements */
+.chapter-page figure {
+    max-width: 300px !important;
+    margin: 2rem auto;
+    text-align: center;
+    break-inside: avoid;
+}
+
+.chapter-page figure img {
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Wide/Full figures span columns */
+.chapter-page figure.kg-width-wide,
+.chapter-page figure.kg-width-full {
+    column-span: all !important;
+    max-width: 600px !important;
+    margin: 2.5rem auto !important;
+}
+
+/* Image cards */
+.chapter-page .kg-image-card {
+    max-width: 300px !important;
+    margin: 2rem auto !important;
+    text-align: center;
+    break-inside: avoid;
+}
+
+.chapter-page .kg-image-card.kg-width-wide,
+.chapter-page .kg-image-card.kg-width-full {
+    column-span: all !important;
+    max-width: 600px !important;
+    margin: 2.5rem auto !important;
+}
+
+.chapter-page .kg-image-card img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain;
+}
+
+/* Captions */
+.chapter-page .kg-image-card figcaption,
+.chapter-page figure figcaption {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Ensure images don't break awkwardly in columns */
+.gh-content p img {
+    margin: 1rem auto;
+    display: block;
+}
+
+/* Safety net for unclassified images */
+.chapter-page img:not([class]) {
+    max-width: 280px !important;
+    height: auto !important;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    break-inside: avoid;
+}
+
+/* Mobile adjustments for images */
+@media (max-width: 768px) {
+    .chapter-page .kg-width-wide,
+    .chapter-page .kg-width-full,
+    .chapter-page figure,
+    .chapter-page .kg-image-card {
+        max-width: 95% !important;
+        margin: 1.5rem auto !important;
+    }
+}
+
+/* ============================================
+   BOOK-STYLE VERTICAL PAGINATION SYSTEM
+   Add this to main.css after the existing chapter styles
+   ============================================ */
+
+/* Book Page Container */
+.book-pages-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    perspective: 1000px; /* For 3D transitions */
+}
+
+.book-page {
+    min-height: 70vh;
+    height: auto;
+    overflow: visible;
+    margin-bottom: 4rem;
+    padding: 2rem 0;
+    border-bottom: 2px solid #d4c5a9;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-page.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.book-page:last-child {
+    border-bottom: none;
+}
+
+/* First page special layout */
+.book-page:first-child .article-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.book-page:first-child .page-content {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 769px) {
+    .book-page:first-child .page-content {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .book-page:first-child .article-header {
+        grid-column: 1 / -1;
+    }
+
+    .book-page:first-child p:first-of-type {
+        grid-column: 1 / -1;
+        font-size: 1.2em;
+        line-height: 1.6;
+    }
+}
+
+/* Page Numbers */
+.page-number {
+    position: absolute;
+    bottom: 1rem;
+    right: 2rem;
+    font-size: 0.9rem;
+    color: #8b7355;
+    font-style: italic;
+}
+
+/* Left page (even numbers) */
+.book-page.even-page .page-number {
+    left: 2rem;
+    right: auto;
+}
+
+/* Continue Reading Indicator */
+.page-continue {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: #8b7355;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* Mobile: Stack pages naturally */
+@media (max-width: 768px) {
+    .book-page {
+        min-height: auto;
+        max-height: none;
+        overflow: visible;
+        margin-bottom: 3rem;
+        padding: 1.5rem 0;
+    }
+    
+    .page-continue {
+        display: none; /* Hide continue indicator on mobile */
+    }
+}
+
+/* Tablet and Desktop: Flexible page heights */
+@media (min-width: 769px) {
+    .book-page {
+        min-height: auto;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        position: relative;
+        padding: 2rem 3rem; /* Add horizontal padding for readability */
+    }
+    
+    /* Subtle page separator instead of gradient fade */
+    .book-page::after {
+        content: '';
+        position: absolute;
+        bottom: -2px; /* Align with border */
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: rgba(139, 115, 85, 0.2);
+        pointer-events: none;
+    }
+    
+    .book-page:last-child::after {
+        display: none; /* No fade on last page */
+    }
+}
+
+/* Page Navigation Controls */
+.page-navigation {
+    position: sticky;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border: 1px solid #e8e4d8;
+    z-index: 1000;
+    width: fit-content;
+    margin: 2rem auto;
+}
+
+.page-nav-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #8b7355;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    border-radius: 15px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.page-nav-btn:hover {
+    background: #f0f0f0;
+    color: #2c2c2c;
+    transform: translateY(-1px);
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    font-size: 0.9rem;
+    color: #666;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Hide page navigation on mobile */
+@media (max-width: 768px) {
+    .page-navigation {
+        display: none;
+    }
+}
+
+/* Smooth scrolling between pages */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Page content layout */
+.book-page .page-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 769px) {
+    .book-page .page-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+
+    .book-page .article-header,
+    .book-page .chapter-questions {
+        grid-column: 1 / -1;
+    }
+    
+    .book-page .gh-content > p,
+    .book-page .gh-content > blockquote {
+        margin: 0;
+        padding: 1rem 0;
+    }
+}
+
+.book-page.visible .page-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure headings stay with their content */
+.book-page .gh-content h1,
+.book-page .gh-content h2,
+.book-page .gh-content h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.book-page .gh-content blockquote,
+.book-page .gh-content figure,
+.book-page .kg-image-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin: 2rem 0;
+}
+
+/* Special handling for interactive elements */
+.chapter-questions {
+    break-before: page;
+    page-break-before: always;
+    margin-top: 2rem;
+}
+
+/* Ensure images don't get cut off at page breaks */
+.book-page img,
+.book-page figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    max-height: 60vh; /* Ensure images fit within a page */
+    object-fit: contain;
+}
+
+/* Chapter navigation spans full width */
+.chapter-navigation {
+    break-before: page;
+    page-break-before: always;
+    margin-top: 3rem;
+}

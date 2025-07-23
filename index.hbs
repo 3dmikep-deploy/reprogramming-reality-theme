@@ -1,0 +1,75 @@
+{{!< default}}
+
+{{!-- Navigation --}}
+{{> "navigation"}}
+
+{{!-- Main Content --}}
+<main class="site-main">
+    <section class="content-section">
+        <div class="container">
+            {{#is "tag"}}
+                <h1 class="section-title">{{tag.name}}</h1>
+                {{#if tag.description}}
+                    <p class="section-description">{{tag.description}}</p>
+                {{/if}}
+            {{else}}
+                {{#is "author"}}
+                    <h1 class="section-title">{{primary_author.name}}</h1>
+                    {{#if primary_author.bio}}
+                        <p class="section-description">{{primary_author.bio}}</p>
+                    {{/if}}
+                {{else}}
+                    <h1 class="section-title">All Posts</h1>
+                {{/is}}
+            {{/is}}
+        </div>
+
+    <section class="chapters-section">
+        <div class="container">
+            <h2 class="section-title">Explore the Paradoxes</h2>
+            
+            {{!-- List all posts in the current context --}}
+            <div class="post-feed">
+                {{#foreach posts}}
+                    <article class="chapter-card" data-chapter="{{@index}}">
+                        <a href="{{url}}" class="chapter-link">
+                            {{#if feature_image}}
+                                <div class="chapter-image">
+                                    <img src="{{img_url feature_image size="l"}}" alt="{{title}}" loading="lazy" />
+                                </div>
+                            {{/if}}
+                            <div class="chapter-content">
+                                <span class="chapter-number">Chapter {{@number}}</span>
+                                <h3 class="chapter-title">{{title}}</h3>
+                                {{#if custom_excerpt}}
+                                    <p class="chapter-excerpt">{{custom_excerpt}}</p>
+                                {{else}}
+                                    <p class="chapter-excerpt">{{excerpt words="30"}}...</p>
+                                {{/if}}
+                            </div>
+                        </a>
+                    </article>
+                {{/foreach}}
+            </div>
+            
+            {{!-- Pagination --}}
+            {{pagination}}
+            
+            {{!-- CTA Section --}}
+            <div class="cta-section">
+                <h3>Ready to debug your mental operating system?</h3>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary">Read Online</a>
+                    <a href="#" class="btn btn-secondary">Get Physical Copy</a>
+                    <a href="#" class="btn btn-tertiary">Listen to Audiobook</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{{!-- Footer --}}
+{{> "footer"}}
+
+{{!-- Chapter-specific scripts --}}
+<script src="{{asset "js/chapters.js"}}"></script>

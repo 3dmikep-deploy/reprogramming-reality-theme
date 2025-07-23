@@ -1,0 +1,82 @@
+{{!< default}}
+
+<main class="site-main">
+    {{> "navigation"}}
+    <article class="{{post_class}}">
+        {{#is "page"}}
+            {{#if @page.show_title_and_feature_image}}
+                {{#if feature_image}}
+                <figure class="article-image chapter-feature-image">
+                    <img
+                        srcset="{{img_url feature_image size="s"}} 300w,
+                                {{img_url feature_image size="m"}} 600w,
+                                {{img_url feature_image size="l"}} 1000w,
+                                {{img_url feature_image size="xl"}} 2000w"
+                        sizes="(min-width: 1400px) 1400px, 92vw"
+                        src="{{img_url feature_image size="xl"}}"
+                        alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                    />
+                    {{#if feature_image_caption}}
+                        <figcaption>{{feature_image_caption}}</figcaption>
+                    {{/if}}
+                </figure>
+            {{/if}}
+
+            <header class="article-header chapter-header">
+                <h1 class="article-title chapter-title">{{title}}</h1>
+                {{#if custom_excerpt}}
+                    <p class="article-custom-excerpt chapter-excerpt">{{custom_excerpt}}</p>
+                {{/if}}
+            </header>
+            {{/if}}
+
+        <div class="article-content gh-canvas">
+            {{!-- Byline and other meta can be outside the main content if desired --}}
+            <div class="article-byline">
+                <section class="article-byline-content">
+                    <div class="article-byline-meta">
+                        {{#primary_author}}
+                        <a class="author-avatar" href="{{url}}">
+                            {{#if profile_image}}
+                                <img class="author-profile-image" src="{{img_url profile_image size="xs"}}" alt="{{name}}" />
+                            {{else}}
+                                <span class="author-profile-image">{{> "icons/avatar"}}</span>
+                            {{/if}}
+                        </a>
+                        <h4 class="author-name"><a href="{{url}}">{{name}}</a></h4>
+                        {{/primary_author}}
+                        <div class="byline-meta-content">
+                            <time class="byline-meta-date" datetime="{{date format="YYYY-MM-DD"}}">{{date}}</time>
+                            <span class="byline-reading-time"><span class="bull">&bull;</span> {{reading_time}}</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="gh-content">
+                {{content}}
+            </section>
+        </div>
+
+        {{!-- Related posts section can stay, as pages can have tags --}}
+        {{#if primary_tag}}
+        <aside class="read-more-wrap">
+            <div class="read-more inner">
+                {{#get "posts" limit="3" filter="tags:[{{primary_tag.slug}}]+id:-{{id}}+posts.page:false" include="tags,authors" as |related|}}
+                    {{#if related}}
+                        <h3>More in <a href="{{primary_tag.url}}">{{primary_tag.name}}</a></h3>
+                        <div class="read-more-cards">
+                            {{#foreach related}}
+                                {{> "post-card"}}
+                            {{/foreach}}
+                        </div>
+                    {{/if}}
+                {{/get}}
+            </div>
+        </aside>
+        {{/if}}
+        {{/is}}
+    </article>
+</main>
+
+{{> "footer"}}

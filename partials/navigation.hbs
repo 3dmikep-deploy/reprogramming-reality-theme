@@ -1,0 +1,15 @@
+<nav class="site-nav">
+    <div class="nav-wrapper">
+        <a class="site-logo" href="{{@site.url}}">
+            {{#if @site.logo}}
+                <img src="{{@site.logo}}" alt="{{@site.title}}" />
+            {{else}}
+                {{@site.title}}
+            {{/if}}
+        </a>
+        
+        <div class="nav-menu">
+            {{navigation}}
+        </div>
+    </div>
+</nav>

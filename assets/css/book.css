@@ -1,0 +1,508 @@
+/* Book Reading Experience CSS */
+/* Import Font Styles */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&family=Source+Serif+Pro:wght@400;600&display=swap');
+
+/* Base CSS Variables */
+:root {
+  /* Book-specific colors */
+  --paper: #fefcf7; /* warm paper white */
+  --ink: #2c2c2c; /* readable dark gray */
+  --spine: #8b5a3c; /* rich brown leather */
+  --gold: #ffd700; /* warm gold accent */
+  --shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Live book settings - updated by JavaScript */
+  --book-font-size: 16px;
+  --book-font-family: "Crimson Text", Georgia, serif;
+  --book-text-color: #2c2c2c;
+  --book-bg-color: #fefcf7;
+  --book-line-height: 1.6;
+}
+
+.dark-theme {
+  --paper: #2a2a2a;
+  --ink: #e5e5e5;
+  --spine: #5c3a26;
+  --gold: #ccaa00;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --book-bg-color: #2a2a2a;
+  --book-text-color: #e5e5e5;
+}
+
+/* Base Styles */
+body {
+  background: linear-gradient(135deg, #faf7f0 0%, #f4e6d5 100%);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Book Container */
+.book-container {
+  min-height: 100vh;
+  padding-top: 80px;
+  padding-bottom: 2rem;
+}
+
+/* Two-page spread */
+.two-page-spread {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+  perspective: 1500px;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+.book-page {
+  width: 32rem;
+  height: 42rem;
+  background: var(--book-bg-color);
+  position: relative;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.book-page.left {
+  border-radius: 0.5rem 0 0 0.5rem;
+  transform-origin: right center;
+}
+
+.book-page.right {
+  border-radius: 0 0.5rem 0.5rem 0;
+  transform-origin: left center;
+}
+
+.book-page:hover {
+  transform: scale(1.02);
+}
+
+.book-page.left:hover {
+  transform: rotateY(-8deg) scale(1.02);
+}
+
+.book-page.right:hover {
+  transform: rotateY(8deg) scale(1.02);
+}
+
+.book-page-content {
+  padding: 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--book-font-family);
+  font-size: var(--book-font-size);
+  line-height: var(--book-line-height);
+  color: var(--book-text-color);
+  text-align: justify;
+  overflow: hidden;
+}
+
+/* Chapter titles */
+.chapter-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--spine);
+}
+
+.chapter-ornament {
+  width: 100px;
+  height: 2px;
+  background: var(--gold);
+  margin: 0 auto 1rem;
+  position: relative;
+}
+
+.chapter-ornament::before,
+.chapter-ornament::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  top: -3px;
+}
+
+.chapter-ornament::before {
+  left: -12px;
+}
+
+.chapter-ornament::after {
+  right: -12px;
+}
+
+/* Book spine */
+.book-spine {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotateZ(90deg);
+  background: var(--spine);
+  color: var(--gold);
+  padding: 1rem 2rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  z-index: 10;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+/* Mobile single page */
+.single-page-mobile {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.mobile-page {
+  background: var(--book-bg-color);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  min-height: 36rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: var(--book-font-family);
+  font-size: var(--book-font-size);
+  line-height: var(--book-line-height);
+  color: var(--book-text-color);
+  text-align: justify;
+}
+
+/* Navigation */
+.book-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(139, 90, 60, 0.1);
+  z-index: 100;
+  padding: 1rem 0;
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.nav-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-button {
+  background: var(--spine);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.nav-button:hover {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.settings-button {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(139, 90, 60, 0.3);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-button:hover {
+  background: rgba(139, 90, 60, 0.1);
+}
+
+/* Settings Panel */
+.settings-panel {
+  position: fixed;
+  right: -400px;
+  top: 0;
+  height: 100vh;
+  width: 400px;
+  background: white;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  transition: right 0.3s ease;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.settings-panel.open {
+  right: 0;
+}
+
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.settings-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139, 90, 60, 0.2);
+}
+
+.settings-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.setting-group {
+  margin-bottom: 2rem;
+}
+
+.setting-label {
+  display: block;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.font-size-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.size-slider {
+  flex: 1;
+  height: 4px;
+  background: rgba(139, 90, 60, 0.2);
+  border-radius: 2px;
+  outline: none;
+  appearance: none;
+}
+
+.size-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--spine);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.color-option {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-option.selected {
+  border-color: var(--spine);
+  transform: scale(1.1);
+}
+
+.font-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.font-option {
+  padding: 0.75rem;
+  border: 2px solid rgba(139, 90, 60, 0.2);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.font-option.selected {
+  border-color: var(--spine);
+  background: rgba(139, 90, 60, 0.1);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: rgba(139, 90, 60, 0.3);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle-switch.active {
+  background: var(--spine);
+}
+
+.toggle-switch::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: left 0.3s;
+}
+
+.toggle-switch.active::before {
+  left: 33px;
+}
+
+/* Reading Progress */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--gold);
+  z-index: 150;
+  transition: width 0.3s ease;
+}
+
+/* Navigation Controls */
+.book-controls {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem;
+  border-radius: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+}
+
+.control-button {
+  background: var(--spine);
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.control-button:hover {
+  background: var(--gold);
+  color: var(--ink);
+  transform: scale(1.1);
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .two-page-spread {
+    display: none;
+  }
+  
+  .single-page-mobile {
+    display: block;
+  }
+  
+  .book-spine {
+    display: none;
+  }
+  
+  .settings-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+  
+  .nav-content {
+    padding: 0 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .single-page-mobile {
+    display: none;
+  }
+}
+
+/* Page texture effect */
+.book-page::before,
+.mobile-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(120, 119, 108, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(120, 119, 108, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(120, 119, 108, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  border-radius: inherit;
+}

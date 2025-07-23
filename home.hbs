@@ -1,0 +1,64 @@
+{{!< default}}
+
+{{!-- The interactive hero section remains the same --}}
+<div id="hero-canvas-container">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+        <div class="container">
+            <h1 class="book-title">Reprogramming Reality</h1>
+            <p class="book-tagline">The Hidden Code Behind Human Behavior, Paradoxes, and AI’s Reflection of Ourselves</p>
+            <div class="author-info">
+                <span>By 2DMikeP</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="site-main">
+    <section class="chapters-section">
+        <div class="container">
+            <h1 class="section-title">Explore the Paradoxes</h1>
+        </div>
+
+        {{!-- THIS IS THE NEW SPLIT-VIEW STRUCTURE --}}
+        {{#get "posts" filter="tag:chapter" include="tags,authors" order="published_at asc" as |chapters|}}
+            <div class="split-view-container">
+                {{!-- Column 1: Sticky Images --}}
+                <div class="split-view-images">
+                    {{#foreach chapters}}
+                        <div class="split-image-item" data-post-id="{{id}}">
+                            {{#if feature_image}}
+                                <img src="{{img_url feature_image size="xl"}}" alt="{{title}}">
+                            {{/if}}
+                        </div>
+                    {{/foreach}}
+                </div>
+
+                {{!-- Column 2: Scrolling Text --}}
+                <div class="split-view-text">
+                    {{#foreach chapters}}
+                        <a href="{{url}}" class="split-text-item" data-post-id="{{id}}">
+                            <h3 class="split-text-title"><span>{{primary_tag.name}}</span>{{title}}</h3>
+                            <p class="split-text-excerpt">{{excerpt words="30"}}</p>
+                        </a>
+                    {{/foreach}}
+                </div>
+            </div>
+        {{/get}}
+    </section>
+
+    {{!-- Call to Action Section --}}
+    <section class="cta-section">
+        <div class="container">
+            <h3>Ready to debug your mental operating system?</h3>
+            <div class="cta-buttons">
+                <a href="/tag/chapter/" class="btn btn-primary">Read All Chapters</a>
+                <a href="#" class="btn btn-secondary">Get Physical Copy</a>
+                <a href="#" class="btn btn-tertiary">Listen to Audiobook</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+

@@ -1,0 +1,22 @@
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>About</h4>
+            <p>{{@site.description}}</p>
+        </div>
+        
+        <div class="footer-section">
+            <h4>Follow</h4>
+            {{#if @site.facebook}}
+                <a href="{{facebook_url @site.facebook}}" target="_blank" rel="noopener">Facebook</a>
+            {{/if}}
+            {{#if @site.twitter}}
+                <a href="{{twitter_url @site.twitter}}" target="_blank" rel="noopener">Twitter</a>
+            {{/if}}
+        </div>
+        
+        <div class="footer-copyright">
+            &copy; {{date format="YYYY"}} {{@site.title}}. All rights reserved.
+        </div>
+    </div>
+</footer>

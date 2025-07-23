@@ -1,0 +1,250 @@
+{{!< default}}
+
+{{#author}}
+<div class="author-page">
+    <header class="author-header">
+        <div class="author-header-content">
+            {{#if profile_image}}
+                <div class="author-avatar-large">
+                    <img src="{{img_url profile_image size="l"}}" alt="{{name}}" />
+                </div>
+            {{else}}
+                <div class="author-avatar-large author-avatar-default">
+                    <i class="fas fa-user"></i>
+                </div>
+            {{/if}}
+            
+            <div class="author-details">
+                <h1 class="author-name">{{name}}</h1>
+                {{#if bio}}
+                    <p class="author-bio">{{bio}}</p>
+                {{/if}}
+                
+                <div class="author-meta">
+                    {{#if location}}
+                        <span class="author-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            {{location}}
+                        </span>
+                    {{/if}}
+                    {{#if website}}
+                        <a href="{{website}}" class="author-website" target="_blank" rel="noopener">
+                            <i class="fas fa-globe"></i>
+                            Website
+                        </a>
+                    {{/if}}
+                    {{#if twitter}}
+                        <a href="{{twitter_url}}" class="author-twitter" target="_blank" rel="noopener">
+                            <i class="fab fa-twitter"></i>
+                            Twitter
+                        </a>
+                    {{/if}}
+                    {{#if facebook}}
+                        <a href="{{facebook_url}}" class="author-facebook" target="_blank" rel="noopener">
+                            <i class="fab fa-facebook"></i>
+                            Facebook
+                        </a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="author-content">
+        <section class="author-posts">
+            <h2 class="section-title">
+                <span>Chapters by {{name}}</span>
+                <div class="title-ornament"></div>
+            </h2>
+            
+            {{#if posts}}
+                <div class="posts-grid">
+                    {{#foreach posts}}
+                        {{> "post-card"}}
+                    {{/foreach}}
+                </div>
+                
+                {{pagination}}
+            {{else}}
+                <div class="no-posts">
+                    <div class="empty-state">
+                        <i class="fas fa-feather-alt"></i>
+                        <h3>No chapters yet</h3>
+                        <p>{{name}} hasn't published any chapters yet.</p>
+                    </div>
+                </div>
+            {{/if}}
+        </section>
+    </main>
+</div>
+{{/author}}
+
+<style>
+.author-page {
+    min-height: 100vh;
+    background: var(--paper);
+}
+
+.author-header {
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-shadow) 100%);
+    padding: 6rem 2rem 4rem;
+    border-bottom: 1px solid rgba(139, 90, 60, 0.2);
+}
+
+.author-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.author-avatar-large {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 24px var(--shadow);
+    border: 4px solid var(--gold);
+}
+
+.author-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-avatar-default {
+    background: var(--spine);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+}
+
+.author-name {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--spine);
+    margin-bottom: 1rem;
+}
+
+.author-bio {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 40rem;
+}
+
+.author-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.author-meta span,
+.author-meta a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-light);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    transition: var(--transition);
+}
+
+.author-meta a:hover {
+    color: var(--spine);
+}
+
+.author-content {
+    padding: 4rem 2rem;
+}
+
+.author-posts {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title span {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--spine);
+    position: relative;
+}
+
+.title-ornament {
+    width: 4rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+    margin: 1rem auto;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--spine);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--ink-light);
+    font-family: var(--font-serif);
+}
+
+@media (max-width: 768px) {
+    .author-header-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .author-avatar-large {
+        width: 6rem;
+        height: 6rem;
+        margin: 0 auto;
+    }
+    
+    .author-name {
+        font-size: 2rem;
+    }
+    
+    .author-meta {
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+</style>

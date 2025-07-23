@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}">
+<head>
+    {{!-- Document Settings --}}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {{!-- Base Meta --}}
+    <title>{{meta_title}}</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {{!-- Styles --}}
+    <link rel="stylesheet" type="text/css" href="{{asset "css/main.css"}}" />
+    
+    {{!-- Ghost outputs important style and meta data with this tag --}}
+    {{ghost_head}}
+</head>
+<body class="{{body_class}}">
+    <div class="site-wrapper">
+        {{!-- All templates get inserted here --}}
+        {{{body}}}
+    </div>
+
+    {{!-- Scripts --}}
+    <script type="module" src="{{asset "js/main.js"}}"></script>
+    
+    {{!-- Chapter Interactive Functionality - Only load on chapter pages --}}
+    {{#is "post"}}
+        <script src="{{asset "js/chapter-interactive.js"}}"></script>
+    {{/is}}
+    
+    {{!-- Ghost outputs important scripts with this tag --}}
+    {{ghost_foot}}
+</body>
+</html>

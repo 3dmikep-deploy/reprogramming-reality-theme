@@ -1,0 +1,98 @@
+{{!< default}}
+
+{{#post}}
+
+{{!-- Ask Book Modal --}}
+<div id="ask-book-modal" class="ask-book-modal">
+    <div class="modal-content">
+        <h3>Ask the Book</h3>
+        <p>What would you like to know about this chapter?</p>
+        <textarea id="book-question" placeholder="Type your question here..."></textarea>
+        <button onclick="submitBookQuestion()">Ask</button>
+        <div id="book-answer" class="book-answer"></div>
+    </div>
+</div>
+
+<article class="chapter-page {{post_class}}">
+    <div class="chapter-container">
+        
+        {{!-- Chapter Header --}}
+        <header class="chapter-header">
+            {{!-- Ask the Book Button --}}
+            <button class="ask-book-btn" onclick="toggleAskBook()">
+                Ask the Book
+            </button>
+            
+            {{!-- Chapter Number --}}
+            {{#primary_tag}}
+                <span class="chapter-number">{{name}}</span>
+            {{/primary_tag}}
+            
+            {{!-- Chapter Title --}}
+            <h1 class="chapter-title">{{title}}</h1>
+            
+            {{!-- Chapter Quote --}}
+            {{#if custom_excerpt}}
+                <blockquote class="chapter-quote">
+                    "{{custom_excerpt}}"
+                </blockquote>
+            {{/if}}
+        </header>
+
+        {{!-- Chapter Content --}}
+        <div class="chapter-content-body">
+            <div class="book-pagination" id="book-pagination">
+                <div class="gh-content">
+                    {{content}}
+                </div>
+            </div>
+        </div>
+
+        {{!-- Interactive Questions Section --}}
+        <div class="chapter-questions" id="chapter-questions">
+            {{!-- This will be populated by JavaScript based on the chapter --}}
+        </div>
+
+        {{!-- Navigation --}}
+        <nav class="chapter-navigation">
+            {{#prev_post}}
+                <a href="{{url}}" class="nav-prev">
+                    <span>Previous Chapter</span>
+                    <strong>{{title}}</strong>
+                </a>
+            {{/prev_post}}
+            
+            {{#next_post}}
+                <a href="{{url}}" class="nav-next">
+                    <span>Next Chapter</span>
+                    <strong>{{title}}</strong>
+                </a>
+            {{/next_post}}
+        </nav>
+    </div>
+
+    {{!-- Ask the Book Modal --}}
+    <div class="ask-book-modal" id="ask-book-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ask the Book</h3>
+                <button class="modal-close" onclick="toggleAskBook()">×</button>
+            </div>
+            <div class="modal-body">
+                <textarea 
+                    id="book-question" 
+                    placeholder="What would you like to know about this chapter?"
+                    rows="4"
+                ></textarea>
+                <button class="submit-question" onclick="askQuestion()">
+                    Ask Question
+                </button>
+            </div>
+            <div class="modal-response" id="modal-response">
+                <!-- AI response will appear here -->
+            </div>
+        </div>
+    </div>
+</article>
+
+{{/post}}
