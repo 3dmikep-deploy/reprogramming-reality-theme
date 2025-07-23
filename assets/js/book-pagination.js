@@ -337,9 +337,17 @@ class BookPagination {
       this.isMobile = window.innerWidth <= 768;
       
       if (wasMobile !== this.isMobile) {
-        // Adjust current page for layout change
-        if (this.isMobile && this.currentPage % 2 === 1) {
-          this.currentPage--;
+        // Ensure current page index works for the new layout
+        if (this.isMobile) {
+          // Mobile view shows one page at a time
+          if (this.currentPage % 2 === 1) {
+            this.currentPage--;
+          }
+        } else {
+          // Desktop view uses two-page spreads; start on an even index
+          if (this.currentPage % 2 === 1) {
+            this.currentPage--;
+          }
         }
         this.generatePages();
         this.updateDisplay();
