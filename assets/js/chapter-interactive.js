@@ -147,24 +147,37 @@ function toggleAskBook() {
 }
 
 function askQuestion() {
-    const question = document.getElementById('book-question').value;
+    const questionInput = document.getElementById('book-question');
     const responseDiv = document.getElementById('modal-response');
-    
-    if (!question.trim()) return;
-    
+    const question = questionInput.value.trim();
+
+    if (!question) return;
+
     responseDiv.innerHTML = '<div class="loading">Thinking...</div>';
-    
-    // This would connect to your AI service
-    // For now, showing a placeholder response
-    setTimeout(() => {
+
+    fetch('/api/ask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ question })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+    })
+    .then(data => {
         responseDiv.innerHTML = `
             <div class="ai-response">
                 <h4>Response:</h4>
-                <p>This is where the AI response would appear based on the chapter content and your question.</p>
-                <p><em>Note: This would integrate with your chosen AI service (OpenAI, Claude API, etc.)</em></p>
+                <p>${data.answer}</p>
             </div>
         `;
-    }, 1500);
+    })
+    .catch(err => {
+        console.error('AskBook error:', err);
+        responseDiv.innerHTML = '<div class="error">Failed to get answer. Please try again later.</div>';
+    });
 }
 
 // ============================================

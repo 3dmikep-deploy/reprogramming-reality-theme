@@ -158,6 +158,15 @@ Functions:
 3. Add corresponding styles to SCSS
 4. Update templates as needed
 
+### Ask the Book API
+
+The interactive "Ask the Book" modal uses a small Express server to query the OpenAI API. To run it locally:
+
+1. Install dependencies with `npm install`.
+2. Copy `.env.example` to `.env` and set `OPENAI_API_KEY`.
+3. Start the server using `node ask-book-server.js`.
+4. The chapter page JavaScript will POST your question to `/api/ask` and display the AI response in the modal.
+
 ### Modifying 3D Elements
 1. Modify the `createGlassesModel()` function for model changes
 2. Update animation parameters in `initHeroAnimation()`
